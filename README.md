@@ -7,3 +7,6 @@ List of Apis
 2. Add bill
 3. Fetch bill
 4. Pay bill
+
+# Configuration
+Change credentials in application.properties with your credentials
