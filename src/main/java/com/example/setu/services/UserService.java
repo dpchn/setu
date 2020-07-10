@@ -54,7 +54,6 @@ public class UserService {
 					payments.setRefId(refId);
 					paymentsDao.save(payments);
 					apiResponse.put("status", "SUCCESS");
-					apiResponse.put("message", "user-added-successfully");
 				} else {
 					apiResponse.put("status", "ERROR");
 					apiResponse.put("erroCode", "no bill found");
@@ -86,6 +85,7 @@ public class UserService {
 				user.setName(parameter.getUserName());
 				userDao.save(user);
 				apiResponse.put("status", "SUCCESS");
+				apiResponse.put("message", "user-added-successfully");
 			} else {
 				apiResponse.put("status", "ERROR");
 				apiResponse.put("erroCode", "user-already-exist");
