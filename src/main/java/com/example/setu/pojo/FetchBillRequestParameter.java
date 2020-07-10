@@ -12,18 +12,18 @@ public class FetchBillRequestParameter {
 	@NotEmpty(message = "Contact no. should not be empty")
 	@Size(min = 10, max = 10, message = "Contact no. is not valid")
 	@Pattern(regexp = "^[0-9]*$", message = "Invalid  format")
-	String contactNo;
+	String mobileNumber;
 
-	
 	public FetchBillRequestParameter() {
-		
-	}
-	
-	public String getContactNo() {
-		return contactNo;
+
 	}
 
-	public void setContactNo(String contactNo) {
-		this.contactNo = contactNo;
+	public String getMobileNumber() {
+		return mobileNumber;
 	}
+
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+
 }

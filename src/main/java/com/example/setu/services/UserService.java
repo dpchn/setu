@@ -40,7 +40,7 @@ public class UserService {
 		Map<String, Object> apiResponse = new HashMap<String, Object>();
 		HttpStatus httpStatus = HttpStatus.OK;
 		try {
-			User user = userDao.findByContactNumberAndIsDeleted(parameter.getContactNo(), false);
+			User user = userDao.findByContactNumberAndIsDeleted(parameter.getMobileNumber(), false);
 			if (user != null) {
 				Payments payments = paymentsDao.findByUserAndIsPaid(user, false);
 				if (payments != null) {
@@ -69,7 +69,7 @@ public class UserService {
 			apiResponse.put("erroCode", "unhandled-error");
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 			logger.error(
-					"Exception while bill fetch : " + e.getMessage() + " contactNO. : " + parameter.getContactNo());
+					"Exception while bill fetch : " + e.getMessage() + " contactNO. : " + parameter.getMobileNumber());
 		}
 		return new ResponseEntity<Map<String, Object>>(apiResponse, httpStatus);
 	}

@@ -24,7 +24,7 @@ public class CustomhandlerInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		if(authorize.validate(request.getHeader("apiKey"))) {
+		if(authorize.validate(request.getHeader("X-API-KEY"))) {
 			return true;
 		}
 		throw new AccessDeniedException(null);

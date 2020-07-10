@@ -8,7 +8,7 @@ public class AddPaymentInfoRequestParameter {
 
 	@NotNull
 	@NotEmpty(message = "dueDate should not be empty")
-	String contactNo;
+	String mobileNumber;
 	@NotNull
 	@NotEmpty(message = "dueDate should not be empty")
 	String dueAmount;
@@ -20,12 +20,12 @@ public class AddPaymentInfoRequestParameter {
 
 	}
 
-	public String getContactNo() {
-		return contactNo;
+	public String getMobileNumber() {
+		return mobileNumber;
 	}
 
-	public void setContactNo(String contactNo) {
-		this.contactNo = contactNo;
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
 	}
 
 	public String getDueAmount() {

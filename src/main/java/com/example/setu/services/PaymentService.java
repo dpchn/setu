@@ -113,7 +113,7 @@ public class PaymentService {
 	public ResponseEntity<Map<String, Object>> addBillForUser(AddPaymentInfoRequestParameter parameters) {
 		Map<String, Object> apiResponse = new HashMap<String, Object>();
 		HttpStatus httpStatus = HttpStatus.OK;
-		User user = userDao.findByContactNumberAndIsDeleted(parameters.getContactNo(), false);
+		User user = userDao.findByContactNumberAndIsDeleted(parameters.getMobileNumber(), false);
 		try {
 			if (user != null) {
 				Payments payment = paymentsDao.findByUserAndIsPaid(user, false);
@@ -141,7 +141,7 @@ public class PaymentService {
 			apiResponse.put("status", "ERROR");
 			apiResponse.put("erroCode", "unhandled-error");
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-			logger.error("Exception while bill add : " + SetuUtils.getStackTrace(e) + " contactNo. : " + parameters.getContactNo());
+			logger.error("Exception while bill add : " + SetuUtils.getStackTrace(e) + " contactNo. : " + parameters.getMobileNumber());
 		}
 		return new ResponseEntity<Map<String, Object>>(apiResponse, httpStatus);
 	}
