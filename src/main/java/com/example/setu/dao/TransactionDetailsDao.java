@@ -10,5 +10,6 @@ import com.example.setu.models.TransactionDetails;
 @Transactional
 public interface TransactionDetailsDao extends CrudRepository<TransactionDetails, Long> {
 
-	public List<TransactionDetails> findByTransactionId(String transactionId);
+	public List<TransactionDetails> findByTransactionIdAndStatus(String transactionId, String status);
+	public TransactionDetails findByTransactionIdAndRefId(String transactionId, String refId);
 }

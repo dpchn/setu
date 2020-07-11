@@ -1,9 +1,11 @@
 package com.example.setu.pojo;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.lang.NonNull;
+
 
 public class UpdatePaymentParameters {
 
@@ -11,6 +13,8 @@ public class UpdatePaymentParameters {
 	@NotEmpty(message = "refId should not empty")
 	String refId;
 
+	@NonNull
+	@Valid
 	Transaction transaction;
 
 	public UpdatePaymentParameters() {

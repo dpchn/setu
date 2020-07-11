@@ -1,6 +1,7 @@
 package com.example.setu.services;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -49,7 +50,7 @@ public class PaymentService {
 			if (payment != null) {
 				double amount = SetuUtils.getDoubleValue(parameters.getTransaction().getAmountPaid());
 				if (amount == payment.getDueAmount()) {
-					TransactionDetails transactionDetails = makeTransaction(payment, parameters.getTransaction());
+					TransactionDetails transactionDetails = makeTransaction(payment, parameters);
 					if (transactionDetails != null && transactionDetails.getStatus().equalsIgnoreCase("SUCCESS")) {
 						payment.setDueAmount(0);
 						payment.setPaid(true);
@@ -71,9 +72,18 @@ public class PaymentService {
 					httpStatus = HttpStatus.BAD_REQUEST;
 				}
 			} else {
-				apiResponse.put("status", "ERROR");
-				apiResponse.put("erroCode", "invalid-ref-id");
-				httpStatus = HttpStatus.NOT_FOUND;
+				TransactionDetails transaction = transactionDetailsDao
+						.findByTransactionIdAndRefId(parameters.getTransaction().getId(), parameters.getRefId());
+				if (transaction != null) {
+					Map<String, String> data = new HashMap<String, String>();
+					data.put("ackID", transaction.getAckId());
+					apiResponse.put("data", data);
+					apiResponse.put("status", "SUCCESS");
+				} else {
+					apiResponse.put("status", "ERROR");
+					apiResponse.put("erroCode", "invalid-ref-id");
+					httpStatus = HttpStatus.NOT_FOUND;
+				}
 			}
 		} catch (Exception e) {
 			apiResponse.put("status", "ERROR");
@@ -90,13 +100,20 @@ public class PaymentService {
 	 * @param payment
 	 * @param transactionParameters
 	 */
-	private TransactionDetails makeTransaction(Payments payment, Transaction transactionParameters) {
-		TransactionDetails transactionDetails = new TransactionDetails();
+	private TransactionDetails makeTransaction(Payments payment, UpdatePaymentParameters parameters) {
+		List<TransactionDetails> transactionList = transactionDetailsDao.findByTransactionIdAndStatus(parameters.getTransaction().getId(), "SUCCESS");
+		TransactionDetails transactionDetails=new TransactionDetails();
 		try {
-			String ackId = SetuUtils.generateUnique("AX", "yyMMdd");
-			transactionDetails.setAckId(ackId);
-			transactionDetails.setStatus("SUCCESS");
-			transactionDetails.setPayment(payment);
+			if (transactionList.isEmpty()) {
+				String ackId = SetuUtils.generateUnique("AX", "yyMMdd");
+				transactionDetails.setTransactionId(parameters.getTransaction().getId());
+				transactionDetails.setAckId(ackId);
+				transactionDetails.setRefId(parameters.getRefId());
+				transactionDetails.setStatus("SUCCESS");
+				transactionDetails.setPayment(payment);
+			} else {
+				transactionDetails.setStatus("FAIL");
+			}
 		} catch (Exception e) {
 			logger.error("Exception : " + e.getMessage());
 			transactionDetails.setStatus("FAIL");
@@ -107,6 +124,7 @@ public class PaymentService {
 
 	/**
 	 * Method to add bill for User
+	 * 
 	 * @param parameters
 	 * @return
 	 */
@@ -119,7 +137,7 @@ public class PaymentService {
 				Payments payment = paymentsDao.findByUserAndIsPaid(user, false);
 				if (payment == null) {
 					payment = new Payments();
-					System.out.println("amount : "+SetuUtils.getDoubleValue(parameters.getDueAmount()));
+					System.out.println("amount : " + SetuUtils.getDoubleValue(parameters.getDueAmount()));
 					payment.setDueAmount(SetuUtils.getDoubleValue(parameters.getDueAmount()));
 					payment.setDueDate(parameters.getDueDate());
 					payment.setUser(user);
@@ -136,12 +154,13 @@ public class PaymentService {
 				apiResponse.put("erroCode", "invalid-contact-no");
 				httpStatus = HttpStatus.BAD_REQUEST;
 			}
-			
+
 		} catch (Exception e) {
 			apiResponse.put("status", "ERROR");
 			apiResponse.put("erroCode", "unhandled-error");
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-			logger.error("Exception while bill add : " + SetuUtils.getStackTrace(e) + " contactNo. : " + parameters.getMobileNumber());
+			logger.error("Exception while bill add : " + SetuUtils.getStackTrace(e) + " contactNo. : "
+					+ parameters.getMobileNumber());
 		}
 		return new ResponseEntity<Map<String, Object>>(apiResponse, httpStatus);
 	}

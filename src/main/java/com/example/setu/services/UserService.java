@@ -78,10 +78,10 @@ public class UserService {
 		Map<String, Object> apiResponse = new HashMap<String, Object>();
 		HttpStatus httpStatus = HttpStatus.OK;
 		try {
-			User user = userDao.findByContactNumberAndIsDeleted(parameter.getContactNo(), false);
+			User user = userDao.findByContactNumberAndIsDeleted(parameter.getMobileNumber(), false);
 			if (user == null) {
 				user = new User();
-				user.setContactNumber(parameter.getContactNo());
+				user.setContactNumber(parameter.getMobileNumber());
 				user.setName(parameter.getUserName());
 				userDao.save(user);
 				apiResponse.put("status", "SUCCESS");
@@ -95,7 +95,7 @@ public class UserService {
 			apiResponse.put("status", "ERROR");
 			apiResponse.put("erroCode", "unhandled-error");
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-			logger.error("Exception while  add user: " + e.getMessage() + " contactNO. : " + parameter.getContactNo());
+			logger.error("Exception while  add user: " + e.getMessage() + " contactNO. : " + parameter.getMobileNumber());
 		}
 		return new ResponseEntity<Map<String, Object>>(apiResponse, httpStatus);
 	}

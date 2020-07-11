@@ -1,23 +1,24 @@
 package com.example.setu.pojo;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.lang.NonNull;
 
-@Validated
 public class Transaction {
 
 	@NotNull
 	@NotEmpty(message = "transaction id should have some value")
 	String id;
 	
-	@NotNull
+	@NonNull
 	@NotEmpty(message = "Should Valid amount")
 	String amountPaid;
-	@NotNull
-	@NotEmpty(message = "Should have Valid date")
+	
+	@NonNull
+	@NotBlank(message = "Should have Valid date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	String date;
 

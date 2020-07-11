@@ -24,6 +24,9 @@ public class TransactionDetails extends SetuBase{
 	@Column
 	private String ackId;
 	
+	@Column
+	private String refId;
+	
 	public TransactionDetails() {
 		
 	}
@@ -58,5 +61,13 @@ public class TransactionDetails extends SetuBase{
 
 	public void setAckId(String ackId) {
 		this.ackId = ackId;
+	}
+
+	public String getRefId() {
+		return refId;
+	}
+
+	public void setRefId(String refId) {
+		this.refId = refId;
 	}
 }

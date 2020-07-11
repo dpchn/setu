@@ -56,22 +56,4 @@ public class ExceptionAdvice {
 		CustomErrorResponse error = new CustomErrorResponse("path-not-found", "ERROR");
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
-
-	// @ExceptionHandler(NotFoundException.class)
-
-	@ResponseBody
-	ResponseEntity<?> handleControllerException(HttpServletRequest request, Throwable ex) {
-		HttpStatus status = getStatus(request);
-		return new ResponseEntity<>(new ApiResponse(300, "hello", "fail"), HttpStatus.ACCEPTED);
-	}
-
-	private HttpStatus getStatus(HttpServletRequest request) {
-		Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
-		System.out.println("Hello :" + request.getHeader("apiKey"));
-		if (statusCode == null) {
-			return HttpStatus.INTERNAL_SERVER_ERROR;
-		}
-		return HttpStatus.valueOf(statusCode);
-	}
-
 }
